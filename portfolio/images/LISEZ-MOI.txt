@@ -1,3 +1,0 @@
-Mets ici tes images et vidéos (ex: assetto-1.jpg, marmailles-1.png, demo.mp4).
-Ensuite, dans les pages HTML, cherche "AJOUTER UNE IMAGE" et remplace le bloc
-.media-slot par : <img src="images/ton-image.jpg" alt="..." class="zoom">
