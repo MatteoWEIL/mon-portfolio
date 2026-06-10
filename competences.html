@@ -416,7 +416,7 @@ function initPixelWaves(){
         var base=h*0.42+Math.sin(x*0.013+t)*h*0.26+Math.sin(x*0.005-t*0.6)*h*0.12;
         var col=mwGrad(x/w);
         for(var y=base;y<h;y+=cell){ctx.globalAlpha=(y<base+cell*1.4)?1:0.9;ctx.fillStyle=col;ctx.fillRect(x,y,cell-2,cell-2);}}
-      ctx.globalAlpha=1;t+=0.035;if(!REDUCE)requestAnimationFrame(draw);}
+      ctx.globalAlpha=1;t+=0.013;if(!REDUCE)requestAnimationFrame(draw);}
     draw();window.addEventListener('resize',function(){size();if(REDUCE)draw();});});}
 
 /* nom en pixels réactif à la souris */

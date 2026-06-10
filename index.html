@@ -499,7 +499,7 @@ function initPixelWaves(){
         var base=h*0.42+Math.sin(x*0.013+t)*h*0.26+Math.sin(x*0.005-t*0.6)*h*0.12;
         var col=mwGrad(x/w);
         for(var y=base;y<h;y+=cell){ctx.globalAlpha=(y<base+cell*1.4)?1:0.9;ctx.fillStyle=col;ctx.fillRect(x,y,cell-2,cell-2);}}
-      ctx.globalAlpha=1;t+=0.035;if(!REDUCE)requestAnimationFrame(draw);}
+      ctx.globalAlpha=1;t+=0.013;if(!REDUCE)requestAnimationFrame(draw);}
     draw();window.addEventListener('resize',function(){size();if(REDUCE)draw();});});}
 
 /* nom en pixels réactif à la souris */
@@ -520,7 +520,7 @@ function initPixelName(){
     for(var i=0;i<particles.length;i++){var p=particles[i];
       var dx=p.x-mouse.x,dy=p.y-mouse.y,d2=dx*dx+dy*dy;
       if(d2<8000){var dd=Math.sqrt(d2)||1,f=(90-dd)/90*4.2;p.x+=dx/dd*f;p.y+=dy/dd*f;}
-      p.x+=(p.hx-p.x)*0.12;p.y+=(p.hy-p.y)*0.12;ctx.fillStyle=p.c;ctx.fillRect(p.x,p.y,sz,sz);}
+      p.x+=(p.hx-p.x)*0.12;p.y+=(p.hy-p.y)*0.06;ctx.fillStyle=p.c;ctx.fillRect(p.x,p.y,sz,sz);}
     requestAnimationFrame(frame);}
   function staticDraw(){ctx.clearRect(0,0,cv.width,cv.height);for(var i=0;i<particles.length;i++){var p=particles[i];ctx.fillStyle=p.c;ctx.fillRect(p.hx,p.hy,sz,sz);}}
   cv.addEventListener('mousemove',function(e){var r=cv.getBoundingClientRect();mouse.x=e.clientX-r.left;mouse.y=e.clientY-r.top;});
