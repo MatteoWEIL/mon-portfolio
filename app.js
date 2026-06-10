@@ -30,18 +30,20 @@ window.addEventListener('DOMContentLoaded',function(){
   var burger=document.getElementById('burger'),links=document.getElementById('navlinks');
   if(burger)burger.addEventListener('click',function(){links.classList.toggle('open');});
 
-  /* apparition au défilement (avec repli si navigateur ancien) */
-  if('IntersectionObserver' in window){
-    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.14});
-    document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
-    var cO=new IntersectionObserver(function(es){es.forEach(function(e){if(!e.isIntersecting)return;
-      var el=e.target,end=+el.dataset.count,cur=0,st=Math.max(1,Math.round(end/40));
-      var t=setInterval(function(){cur+=st;if(cur>=end){cur=end;clearInterval(t);}el.textContent=cur;},22);cO.unobserve(el);});},{threshold:.6});
-    document.querySelectorAll('[data-count]').forEach(function(c){cO.observe(c);});
-  }else{
-    document.querySelectorAll('.reveal').forEach(function(el){el.classList.add('in');});
-    document.querySelectorAll('[data-count]').forEach(function(c){c.textContent=c.dataset.count;});
-  }
+  /* apparition au défilement — sécurisée : en cas de souci, tout reste affiché */
+  function _showAll(){
+    var r=document.querySelectorAll('.reveal');for(var i=0;i<r.length;i++)r[i].classList.add('in');
+    var c=document.querySelectorAll('[data-count]');for(var j=0;j<c.length;j++)c[j].textContent=c[j].dataset.count;}
+  try{
+    if('IntersectionObserver' in window){
+      var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.14});
+      document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
+      var cO=new IntersectionObserver(function(es){es.forEach(function(e){if(!e.isIntersecting)return;
+        var el=e.target,end=+el.dataset.count,cur=0,st=Math.max(1,Math.round(end/40));
+        var t=setInterval(function(){cur+=st;if(cur>=end){cur=end;clearInterval(t);}el.textContent=cur;},22);cO.unobserve(el);});},{threshold:.6});
+      document.querySelectorAll('[data-count]').forEach(function(c){cO.observe(c);});
+    }else{_showAll();}
+  }catch(err){_showAll();}
 
   if(!REDUCE){var glow=document.querySelector('.cursor-glow');
     window.addEventListener('mousemove',function(e){if(glow){glow.style.left=e.clientX+'px';glow.style.top=e.clientY+'px';}});
@@ -62,7 +64,10 @@ window.addEventListener('DOMContentLoaded',function(){
   document.addEventListener('click',function(e){if(e.target&&e.target.classList&&e.target.classList.contains('zoom')){
     lb.querySelector('img').src=e.target.src;lb.classList.add('show');}});
 
-  initPixelWaves();initPixelName();init3D();
+  try{initPixelWaves();}catch(e){}
+  try{initPixelName();}catch(e){}
+  try{init3D();}catch(e){}
+  window.__mwReady=true;   /* signale que app.js a bien démarré (filet de sécurité) */
 });
 
 /* vagues pixel animées en continu */
@@ -111,7 +116,7 @@ function initPixelName(){
 function init3D(){if(REDUCE)return;
   var canvas=document.getElementById('three-canvas');if(!window.THREE||!canvas)return;
   var wrap=canvas.parentElement;
-  var renderer=new THREE.WebGLRenderer({canvas:canvas,alpha:true,antialias:true});
+  var renderer;try{renderer=new THREE.WebGLRenderer({canvas:canvas,alpha:true,antialias:true});}catch(e){return;} /* WebGL indispo (ex. Windows sans accélération) -> on abandonne proprement */
   var scene=new THREE.Scene(),cam=new THREE.PerspectiveCamera(50,1,.1,100);cam.position.z=4.4;
   function size(){var w=wrap.clientWidth,h=wrap.clientHeight;renderer.setSize(w,h,false);renderer.setPixelRatio(Math.min(devicePixelRatio,2));cam.aspect=w/h;cam.updateProjectionMatrix();}
   var inner=new THREE.Mesh(new THREE.IcosahedronGeometry(1.5,1),new THREE.MeshBasicMaterial({color:0xC026D3,wireframe:true,transparent:true,opacity:.9}));

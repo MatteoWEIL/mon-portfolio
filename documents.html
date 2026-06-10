@@ -16,7 +16,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 <!-- applique le thème clair/sombre avant l'affichage (évite le clignotement) -->
-<script>(function(){try{if(localStorage.getItem("mw-theme")==="light")document.documentElement.setAttribute("data-theme","light");}catch(e){}})();</script>
+<script>(function(){var h=document.documentElement;h.className+=" js";try{if(localStorage.getItem("mw-theme")==="light")h.setAttribute("data-theme","light");}catch(e){}})();</script>
 </head>
 <body>
 <!-- =================================================================
@@ -81,5 +81,7 @@
 <button class="to-top" aria-label="Haut de page">↑</button>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="app.js"></script>
+<script>/* filet de sécurité : si app.js n'a pas pu démarrer, on réaffiche tout */
+setTimeout(function(){if(!window.__mwReady){var r=document.querySelectorAll(".reveal");for(var i=0;i<r.length;i++)r[i].classList.add("in");var e=document.querySelectorAll(".enter");for(var j=0;j<e.length;j++){e[j].style.opacity=1;e[j].style.transform="none";}}},2500);</script>
 </body>
 </html>
