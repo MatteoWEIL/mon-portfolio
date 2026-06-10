@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Veille techno — Mattéo Weil</title>
+<meta name="description" content="Veille technologique de Mattéo Weil : quantique, IA, cybersécurité.">
+<!-- partage sur les réseaux -->
+<meta property="og:title" content="Veille techno — Mattéo Weil">
+<meta property="og:description" content="Veille technologique de Mattéo Weil : quantique, IA, cybersécurité.">
+<meta property="og:image" content="https://matteoweil.com/wp-content/uploads/2025/02/new_logo-removebg-preview.png">
+<meta property="og:type" content="website">
+<link rel="icon" href="https://matteoweil.com/wp-content/uploads/2025/02/new_logo-removebg-preview.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<!-- applique le thème clair/sombre avant l'affichage (évite le clignotement) -->
+<script>(function(){try{if(localStorage.getItem("mw-theme")==="light")document.documentElement.setAttribute("data-theme","light");}catch(e){}})();</script>
+</head>
+<body>
+<!-- =================================================================
+     COMMENT MODIFIER CE SITE :
+       • PHOTOS  : cherche le mot  AJOUTER UNE IMAGE  dans le code
+       • LIENS   : cherche le mot  LIEN À MODIFIER  (GitHub, LinkedIn, PDF)
+       • Mets tes fichiers dans le dossier  images/
+       • Styles  -> style.css     Animations -> app.js
+     ================================================================= -->
+<div class="scroll-progress"></div>
+<div class="page-fade"></div>
+<div class="cursor-glow"></div>
+<div class="bg-fx"><div class="blob v"></div><div class="blob m"></div><div class="blob r"></div></div>
+<div class="grid-dots"></div>
+<header id="header">
+  <nav class="nav">
+    <a href="index.html" class="logo"><img src="https://matteoweil.com/wp-content/uploads/2025/02/new_logo-removebg-preview.png" alt="Logo Mattéo Weil"> Mattéo Weil</a>
+    <div class="nav-right">
+      <div class="nav-links" id="navlinks"><a href="index.html">accueil</a><a href="documents.html">documents</a><a href="competences.html">compétences</a><a href="projets.html">projets</a><a href="veille.html" class="active">veille techno</a></div>
+      <button class="theme-btn" id="theme-btn" onclick="toggleTheme()" aria-label="Changer le thème"></button>
+      <button class="burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+</header>
+<main>
+<div class="page-head">
+  <span class="eyebrow enter" data-d="1">curiosité technique</span>
+  <h1 class="enter" data-d="2">Veille <span class="grad-text">technologique</span></h1>
+  <p class="enter" data-d="3">Ce qui m’intéresse en ce moment : sécurité, IA et technologies de rupture.</p>
+</div>
+
+<canvas class="pixel-wave"></canvas>
+
+<section style="padding-top:40px">
+  <div class="proj reveal" style="margin-bottom:24px">
+    <!-- 📷 AJOUTER UNE IMAGE ICI : remplace tout le bloc <div class="media-slot">...</div> par
+         <img src="images/ton-image.jpg" alt="Ordinateurs quantiques" class="zoom">
+         (pour une vidéo : <video src="images/demo.mp4" controls></video>) -->
+      <div class="media-slot"><div><div class="icon">◈</div>Emplacement Ordinateurs quantiques<small>visuel principal (16:9)</small></div></div>
+    <div class="body">
+      <p class="ptag">// sujet du moment</p>
+      <h3 style="font-size:28px">Les ordinateurs quantiques</h3>
+      <p>Le calcul quantique promet de bouleverser le chiffrement et la cybersécurité. Comment fonctionne un qubit, quelles menaces pour le RSA, et ce que ça change pour le métier de demain.</p>
+      <div class="chips"><span class="chip hot">Cybersécurité</span><span class="chip">Quantique</span><span class="chip">Chiffrement</span></div>
+    </div>
+  </div>
+  <div class="proj-grid">
+    <a class="proj reveal" data-d="1" href="#">
+      <!-- 📷 AJOUTER UNE IMAGE ICI : remplace tout le bloc <div class="media-slot">...</div> par
+         <img src="images/ton-image.jpg" alt="Veille IA" class="zoom">
+         (pour une vidéo : <video src="images/demo.mp4" controls></video>) -->
+      <div class="media-slot round"><div><div class="icon">◈</div>Emplacement Veille IA<small>illustration</small></div></div>
+      <div class="body"><p class="ptag">// à venir</p><h3>Intelligence artificielle</h3><p>Outils, modèles et usages de l’IA dans le développement et la sécurité.</p><div class="chips"><span class="chip">IA</span><span class="chip">LLM</span><span class="chip">Dev</span></div><span class="more">Bientôt →</span></div>
+    </a>
+    <a class="proj reveal" data-d="2" href="#">
+      <!-- 📷 AJOUTER UNE IMAGE ICI : remplace tout le bloc <div class="media-slot">...</div> par
+         <img src="images/ton-image.jpg" alt="Veille dev" class="zoom">
+         (pour une vidéo : <video src="images/demo.mp4" controls></video>) -->
+      <div class="media-slot round"><div><div class="icon">◈</div>Emplacement Veille dev<small>illustration</small></div></div>
+      <div class="body"><p class="ptag">// à venir</p><h3>Dev &amp; frameworks</h3><p>Nouvelles pratiques, frameworks web et code sécurisé.</p><div class="chips"><span class="chip">Web</span><span class="chip">Frameworks</span><span class="chip">Sécu</span></div><span class="more">Bientôt →</span></div>
+    </a>
+  </div>
+</section>
+</main>
+<footer>© 2026 — Imaginé &amp; développé par <span class="grad-text">Mattéo Weil</span> · matteoweil.com · <a href="mailto:weilmat974@gmail.com" style="color:var(--mauve)">weilmat974@gmail.com</a></footer>
+<button class="to-top" aria-label="Haut de page">↑</button>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
