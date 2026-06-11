@@ -156,8 +156,14 @@ canvas.pixel-wave{display:block;width:100%;height:120px;pointer-events:none}
 .info-row .k{font-family:var(--mono);color:var(--muted);font-size:13px}
 .info-row .val{text-align:right;font-weight:500}
 
-.hero-3d{position:relative;height:420px;width:100%}
-.hero-3d canvas{width:100%;height:100%;display:block}
+.hero-3d{position:relative;height:420px;width:100%;display:grid;place-items:center}
+.hero-3d canvas{position:absolute;top:0;left:0;width:100%;height:100%;display:block}
+.portrait{position:relative;z-index:2;width:228px;height:228px;border-radius:50%;padding:4px;background:var(--grad);
+  box-shadow:0 18px 50px rgba(0,0,0,.45)}
+.portrait>img{position:relative;z-index:1;width:100%;height:100%;border-radius:50%;object-fit:cover;display:block}
+.portrait .portrait-ph{position:absolute;top:4px;left:4px;right:4px;bottom:4px;border-radius:50%;display:grid;place-items:center;
+  background:var(--bg-2);color:var(--muted);font-family:var(--mono);font-size:13px;text-align:center;line-height:1.6}
+.portrait .portrait-ph small{font-size:11px;opacity:.7}
 .hero-3d .badge{position:absolute;bottom:16px;left:0;font-family:var(--mono);font-size:12px;color:var(--muted);
   background:var(--surface);border:1px solid var(--stroke);padding:8px 14px;border-radius:999px;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
 .hero-3d .badge b{color:var(--mauve)}
@@ -202,9 +208,12 @@ img.zoom{cursor:zoom-in}
 .media-slot.soon .icon{font-size:26px;opacity:.85}
 .media-slot.soon small{text-transform:uppercase;letter-spacing:1px}
 /* indicateur "descends" sous le hero */
-.scroll-down{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);font-size:20px;color:var(--mauve);
-  opacity:.7;animation:bob 1.6s ease-in-out infinite;text-decoration:none}
-@keyframes bob{50%{transform:translateX(-50%) translateY(8px)}}
+.scroll-down{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);color:var(--mauve);
+  opacity:.8;animation:bob 1.6s ease-in-out infinite;text-decoration:none;
+  display:flex;flex-direction:column;align-items:center;gap:3px;font-family:var(--mono);font-size:11px;letter-spacing:.5px}
+.scroll-down span{opacity:.85}
+.scroll-down:hover{opacity:1}
+@keyframes bob{50%{transform:translateX(-50%) translateY(7px)}}
 
 .gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:28px}
 
@@ -305,6 +314,15 @@ footer{border-top:1px solid var(--stroke);padding:38px 24px;text-align:center;co
 @keyframes loaderPulse{50%{opacity:.45;transform:scale(.9)}}
 @keyframes loaderOut{to{opacity:0;visibility:hidden;pointer-events:none}}
 
+/* ---- transition "mise sous tension" : la page s'illumine après le loader ---- */
+.power-on{position:fixed;top:0;left:0;right:0;bottom:0;z-index:250;pointer-events:none;opacity:0;
+  background:radial-gradient(circle at 50% 42%,rgba(192,38,211,.32),rgba(139,92,246,.14) 38%,transparent 66%);
+  animation:powerBloom 1.3s ease 1.85s forwards}
+@keyframes powerBloom{0%{opacity:0;transform:scale(.35)}35%{opacity:1}100%{opacity:0;transform:scale(2.1)}}
+/* le contenu s'éclaircit en douceur quand le loader s'efface */
+main,header,footer{animation:litUp 1.1s ease 1.7s both}
+@keyframes litUp{from{opacity:.25}to{opacity:1}}
+
 /* ---- easter egg (code Konami) ---- */
 .mw-toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);z-index:320;background:var(--grad);color:#fff;
   font-family:var(--mono);font-size:13px;padding:12px 20px;border-radius:999px;box-shadow:0 10px 30px rgba(192,38,211,.5)}
@@ -327,6 +345,7 @@ footer{border-top:1px solid var(--stroke);padding:38px 24px;text-align:center;co
        • Le style et les animations sont inclus dans CETTE page (balises <style> et <script>)
      ================================================================= -->
 <div class="loader"><img src="https://matteoweil.com/wp-content/uploads/2025/02/new_logo-removebg-preview.png" alt=""><div class="loader-bar"><span></span></div></div>
+<div class="power-on"></div>
 <canvas id="cursor-trail"></canvas>
 <div class="scroll-progress"></div>
 <div class="page-fade"></div>
@@ -350,7 +369,7 @@ footer{border-top:1px solid var(--stroke);padding:38px 24px;text-align:center;co
   <p class="enter" data-d="3">Clique sur un projet pour voir le détail, la galerie photo et la démo. Tous réalisés en cadre personnel, scolaire ou de stage.</p>
 </div>
 
-<canvas class="pixel-wave"></canvas>
+<canvas class="pixel-wave" data-variant="2"></canvas>
 
 <section style="padding-top:40px">
   <span class="eyebrow reveal">à la une</span>
@@ -360,7 +379,7 @@ footer{border-top:1px solid var(--stroke);padding:38px 24px;text-align:center;co
       <!-- 📷 Image du projet (remplace le fichier dans images/ si besoin) -->
       <div class="media-slot"><img src="images/Assettoleaderboard16_9.jpg" alt="Assetto Leaderboard"></div>
       <div class="body">
-        <p class="ptag">// Projet personnel · SimRacer Challenge</p>
+        <p class="ptag">// Projet entreprise · SimRacer Challenge</p>
         <h3>Assetto Leaderboard</h3>
         <p>Plateforme de suivi de chronos développée pour le SimRacer Challenge — l’opération qui envoie 2 pilotes réunionnais aux 24H de Portimão.</p>
         <div class="chips"><span class="chip hot">SimRacing</span><span class="chip">Application</span><span class="chip">SimRacing</span><span class="chip">Temps réel</span><span class="chip">Données</span></div>
@@ -371,7 +390,7 @@ footer{border-top:1px solid var(--stroke);padding:38px 24px;text-align:center;co
       <!-- 📷 Image du projet (remplace le fichier dans images/ si besoin) -->
       <div class="media-slot"><img src="images/MarmailleAventures.jpg" alt="Marmailles Aventures"></div>
       <div class="body">
-        <p class="ptag">// Projet personnel</p>
+        <p class="ptag">// Projet web · association</p>
         <h3>Marmailles Aventures</h3>
         <p>Application web sur-mesure pour digitaliser les inscriptions d’un centre de loisirs.</p>
         <div class="chips"><span class="chip hot">Sécurité</span><span class="chip">Web</span><span class="chip">PHP</span><span class="chip">Sécurité</span><span class="chip">BDD</span></div>
@@ -573,14 +592,23 @@ window.addEventListener('DOMContentLoaded',function(){
 /* vagues pixel animées en continu */
 function initPixelWaves(){
   document.querySelectorAll('canvas.pixel-wave').forEach(function(cv){
-    var ctx=cv.getContext('2d'),t=Math.random()*10,cell=12;
+    var ctx=cv.getContext('2d'),t=Math.random()*10,cell=12,v=cv.getAttribute('data-variant')||'1';
     function size(){cv.width=cv.clientWidth;cv.height=cv.clientHeight;}
     size();
-    function draw(){var w=cv.width,h=cv.height;ctx.clearRect(0,0,w,h);
-      for(var x=0;x<w;x+=cell){
-        var base=h*0.42+Math.sin(x*0.013+t)*h*0.26+Math.sin(x*0.005-t*0.6)*h*0.12;
-        var col=mwGrad(x/w);
-        for(var y=base;y<h;y+=cell){ctx.globalAlpha=(y<base+cell*1.4)?1:0.9;ctx.fillStyle=col;ctx.fillRect(x,y,cell-2,cell-2);}}
+    function draw(){var w=cv.width,h=cv.height,x,y;ctx.clearRect(0,0,w,h);
+      if(v==='2'){ /* barres type égaliseur */
+        for(x=0;x<w;x+=cell){var bh=h*(0.22+0.62*Math.abs(Math.sin(x*0.045+t*1.3)));
+          for(y=h;y>h-bh;y-=cell){ctx.globalAlpha=0.5+0.5*((h-y)/bh);ctx.fillStyle=mwGrad(x/w);ctx.fillRect(x,y-cell,cell-2,cell-2);}}
+      } else if(v==='3'){ /* diagonales qui défilent */
+        for(x=0;x<w;x+=cell)for(y=0;y<h;y+=cell){var band=Math.floor((x+y)/cell - t*7);
+          if((((band%6)+6)%6)<2){ctx.globalAlpha=0.75;ctx.fillStyle=mwGrad(x/w);ctx.fillRect(x,y,cell-2,cell-2);}}
+      } else if(v==='4'){ /* ondulation en grille (ripple) */
+        for(x=0;x<w;x+=cell)for(y=0;y<h;y+=cell){var d=Math.sin(x*0.02+y*0.025+t*2.2);
+          ctx.globalAlpha=0.12+0.55*(d*0.5+0.5);ctx.fillStyle=mwGrad(x/w);ctx.fillRect(x,y,cell-2,cell-2);}
+      } else { /* 1 : vague (par défaut) */
+        for(x=0;x<w;x+=cell){var base=h*0.42+Math.sin(x*0.013+t)*h*0.26+Math.sin(x*0.005-t*0.6)*h*0.12;
+          for(y=base;y<h;y+=cell){ctx.globalAlpha=(y<base+cell*1.4)?1:0.9;ctx.fillStyle=mwGrad(x/w);ctx.fillRect(x,y,cell-2,cell-2);}}
+      }
       ctx.globalAlpha=1;t+=0.013;if(!REDUCE)requestAnimationFrame(draw);}
     draw();window.addEventListener('resize',function(){size();if(REDUCE)draw();});});}
 
@@ -610,8 +638,10 @@ function initPixelName(){
   cv.addEventListener('touchmove',function(e){var r=cv.getBoundingClientRect(),tt=e.touches[0];mouse.x=tt.clientX-r.left;mouse.y=tt.clientY-r.top;},{passive:true});
   var started=false;
   function go(){if(started)return;started=true;build();if(REDUCE)staticDraw();else frame();}
-  try{if(document.fonts&&document.fonts.ready)document.fonts.ready.then(go);}catch(e){}
-  setTimeout(go,600); /* sécurité : dessine le nom même si la police tarde ou est bloquée */
+  /* on lance la construction du nom APRÈS l'écran de chargement (~2,1s) pour qu'elle soit visible partout */
+  function trigger(){var now=(window.performance&&performance.now)?performance.now():2100;var d=2100-now;setTimeout(go,d>0?d:0);}
+  try{if(document.fonts&&document.fonts.ready)document.fonts.ready.then(trigger);else trigger();}catch(e){trigger();}
+  setTimeout(go,2400); /* filet de sécurité absolu */
   var rt;window.addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(function(){build();if(REDUCE)staticDraw();},250);});}
 
 /* objet 3D (Three.js) */
