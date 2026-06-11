@@ -261,11 +261,12 @@ footer{border-top:1px solid var(--stroke);padding:38px 24px;text-align:center;co
 #cursor-trail{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0}
 
 /* ---- écran d'intro (se masque tout seul, sans JS, impossible à bloquer) ---- */
-.loader{position:fixed;top:0;left:0;right:0;bottom:0;z-index:300;background:var(--bg);display:grid;place-items:center;
+.loader{position:fixed;top:0;left:0;right:0;bottom:0;z-index:300;background:var(--bg);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;
   animation:loaderOut .6s ease 1.5s forwards}
 .loader img{height:62px;width:auto;animation:loaderPulse 1.2s ease-in-out infinite}
 [data-theme="light"] .loader img{filter:invert(1)}
-.loader-bar{position:absolute;bottom:36%;width:170px;height:6px;border-radius:99px;background:var(--surface-2);overflow:hidden}
+.loader-bar{position:relative;width:170px;height:6px;border-radius:99px;background:var(--surface-2);overflow:hidden}
 .loader-bar span{display:block;height:100%;width:0;background:var(--grad);animation:loaderFill 1.5s cubic-bezier(.4,.1,.2,1) forwards}
 @keyframes loaderFill{to{width:100%}}
 @keyframes loaderPulse{50%{opacity:.45;transform:scale(.9)}}
@@ -346,7 +347,7 @@ footer{border-top:1px solid var(--stroke);padding:38px 24px;text-align:center;co
     <div class="about reveal" data-d="2">
       <p>Salut, moi c’est <b>Mattéo</b>, 20 ans, développeur installé près d’<b>Angers</b> après avoir grandi à La Réunion. Je code, je casse, je répare — et je transforme des idées en interfaces et logiciels qui tournent.</p>
       <p>Je démarre en septembre 2026 un <b>Cycle Ingénieur Informatique &amp; Réseaux à l’ESAIP</b> en alternance, avec la <b>cybersécurité</b> en ligne de mire, et je fais vivre <b>AutoDigital</b>, ma micro-entreprise de dev web.</p>
-      <a href="competences.html" class="btn ghost">Mon parcours →</a>
+      <a href="competences.html#parcours" class="btn ghost">Mon parcours →</a>
     </div>
   </div>
 </section>
@@ -399,10 +400,8 @@ footer{border-top:1px solid var(--stroke);padding:38px 24px;text-align:center;co
   <span class="eyebrow reveal">curiosité</span>
   <h2 class="title reveal" style="font-size:clamp(30px,5vw,50px)">Veille technologique</h2>
   <div class="two-col" style="margin-top:30px">
-    <!-- 📷 AJOUTER UNE IMAGE ICI : remplace tout le bloc <div class="media-slot">...</div> par
-         <img src="images/ton-image.jpg" alt="Veille quantique" class="zoom">
-         (pour une vidéo : <video src="images/demo.mp4" controls></video>) -->
-      <div class="media-slot round"><div><div class="icon">◈</div>Emplacement Veille quantique<small>visuel ordinateurs quantiques</small></div></div>
+    <!-- 📷 Image du projet (remplace le fichier dans images/ si besoin) -->
+      <div class="media-slot round"><img src="images/ordinateurquantique.jpeg" alt="Les ordinateurs quantiques" class="zoom"></div>
     <div class="about reveal" data-d="1">
       <h3 style="font-size:26px;font-weight:700;margin-bottom:12px">Les ordinateurs quantiques</h3>
       <p>Mon dernier sujet : comment le calcul quantique pourrait bouleverser le chiffrement, la sécurité et le développement de demain.</p>
@@ -575,10 +574,13 @@ function init3D(){if(REDUCE)return;
 /* ---- traînée de pixels qui suit la souris (clin d'œil au ruban rétro) ---- */
 function initCursorTrail(){
   var cv=document.getElementById('cursor-trail');if(!cv)return;
-  var ctx=cv.getContext('2d'),pts=[],cell=10;
+  var ctx=cv.getContext('2d'),pts=[],cell=10,ph=document.querySelector('.pixel-hero');
   function size(){cv.width=innerWidth;cv.height=innerHeight;}
   size();window.addEventListener('resize',size);
-  window.addEventListener('mousemove',function(e){pts.push({x:e.clientX,y:e.clientY,life:1});if(pts.length>45)pts.shift();});
+  window.addEventListener('mousemove',function(e){
+    if(ph){var r=ph.getBoundingClientRect();
+      if(e.clientX>r.left-50&&e.clientX<r.right+50&&e.clientY>r.top-50&&e.clientY<r.bottom+50)return;} /* pas de traînée sur le nom */
+    pts.push({x:e.clientX,y:e.clientY,life:1});if(pts.length>45)pts.shift();});
   (function loop(){
     ctx.clearRect(0,0,cv.width,cv.height);
     for(var i=0;i<pts.length;i++){var p=pts[i],t=i/pts.length;
