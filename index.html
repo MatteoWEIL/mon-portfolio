@@ -159,13 +159,23 @@ canvas.pixel-wave{display:block;width:100%;height:120px;pointer-events:none}
 .hero-3d{position:relative;height:440px;width:100%;display:grid;place-items:center;overflow:visible;z-index:2}
 .hero-3d canvas{position:absolute;top:0;left:0;width:100%;height:100%;display:block}
 .portrait{position:relative;z-index:2;width:300px;height:300px;border-radius:50%;padding:5px;background:var(--grad);
-  box-shadow:0 20px 55px rgba(0,0,0,.5)}
+  box-shadow:0 20px 55px rgba(0,0,0,.5);overflow: hidden;}
 .portrait .disc{position:absolute;inset:5px;border-radius:50%;background:var(--bg-2);overflow:hidden;display:grid;place-items:center;z-index:1}
 .portrait .portrait-ph{color:var(--muted);font-family:var(--mono);font-size:13px;text-align:center;line-height:1.6}
 .portrait .portrait-ph small{font-size:11px;opacity:.7}
 /* photo détourée : elle "sort" du cercle, la main dépasse à droite par-dessus le texte.
    Ajuste width / left / bottom selon ta photo si la main n'est pas bien placée. */
-.portrait>img{position:absolute;z-index:3;width:124%;height:auto;left:-4%;bottom:0;pointer-events:none}
+/* Modifiez cette classe juste en dessous (vers la ligne 168) */
+.portrait>img{
+  position:absolute;
+  z-index:3;
+  width:100%;       /* ◄ Changez 124% en 100% ou 110% selon vos préférences */
+  height:100%;      /* ◄ Ajoutez la hauteur maximale */
+  object-fit: cover;/* ◄ Permet de garder les proportions sans déformer la photo */
+  left:0;           /* ◄ Remettez à 0 pour centrer horizontalement */
+  bottom:0;
+  pointer-events:none;
+}
 .about-grid .about{position:relative;z-index:1}
 .hero-3d .badge{position:absolute;bottom:16px;left:0;font-family:var(--mono);font-size:12px;color:var(--muted);
   background:var(--surface);border:1px solid var(--stroke);padding:8px 14px;border-radius:999px;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
