@@ -257,6 +257,25 @@ footer{border-top:1px solid var(--stroke);padding:38px 24px;text-align:center;co
   section{padding:80px 22px}.page-head{padding:120px 22px 18px}
   canvas.pixel-wave{height:80px}
 }
+/* ---- traînée de pixels qui suit la souris (style ruban rétro) ---- */
+#cursor-trail{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0}
+
+/* ---- écran d'intro (se masque tout seul, sans JS, impossible à bloquer) ---- */
+.loader{position:fixed;top:0;left:0;right:0;bottom:0;z-index:300;background:var(--bg);display:grid;place-items:center;
+  animation:loaderOut .6s ease 1.5s forwards}
+.loader img{height:62px;width:auto;animation:loaderPulse 1.2s ease-in-out infinite}
+[data-theme="light"] .loader img{filter:invert(1)}
+.loader-bar{position:absolute;bottom:36%;width:170px;height:6px;border-radius:99px;background:var(--surface-2);overflow:hidden}
+.loader-bar span{display:block;height:100%;width:0;background:var(--grad);animation:loaderFill 1.5s cubic-bezier(.4,.1,.2,1) forwards}
+@keyframes loaderFill{to{width:100%}}
+@keyframes loaderPulse{50%{opacity:.45;transform:scale(.9)}}
+@keyframes loaderOut{to{opacity:0;visibility:hidden;pointer-events:none}}
+
+/* ---- easter egg (code Konami) ---- */
+.mw-toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);z-index:320;background:var(--grad);color:#fff;
+  font-family:var(--mono);font-size:13px;padding:12px 20px;border-radius:999px;box-shadow:0 10px 30px rgba(192,38,211,.5)}
+.konami-canvas{position:fixed;top:0;left:0;right:0;bottom:0;z-index:310;pointer-events:none}
+
 /* (Bloc "prefers-reduced-motion" retiré volontairement : on veut que les
    animations CSS — bandeau défilant, dégradé, blobs — tournent aussi même si
    le système demande de réduire les animations.) */
@@ -273,6 +292,8 @@ footer{border-top:1px solid var(--stroke);padding:38px 24px;text-align:center;co
        • Mets tes fichiers dans le dossier  images/
        • Le style et les animations sont inclus dans CETTE page (balises <style> et <script>)
      ================================================================= -->
+<div class="loader"><img src="https://matteoweil.com/wp-content/uploads/2025/02/new_logo-removebg-preview.png" alt=""><div class="loader-bar"><span></span></div></div>
+<canvas id="cursor-trail"></canvas>
 <div class="scroll-progress"></div>
 <div class="page-fade"></div>
 <div class="cursor-glow"></div>
@@ -302,7 +323,7 @@ footer{border-top:1px solid var(--stroke);padding:38px 24px;text-align:center;co
     <div class="skill reveal" data-d="3"><h3><span class="dot"></span>Cybersécurité</h3><div class="chips"><span class="chip hot">Réseaux</span><span class="chip">Linux</span><span class="chip">Sécurité des apps</span><span class="chip">Veille</span></div></div>
     <div class="skill reveal" data-d="1"><h3><span class="dot"></span>Bases de données</h3><div class="chips"><span class="chip">MySQL</span><span class="chip">Modélisation</span><span class="chip">Requêtes</span></div></div>
     <div class="skill reveal" data-d="2"><h3><span class="dot"></span>Outils &amp; IA</h3><div class="chips"><span class="chip">Git</span><span class="chip">GitHub Copilot</span><span class="chip">Claude</span><span class="chip">GPT</span><span class="chip">Gemini</span><span class="chip">AppSheet</span></div></div>
-    <div class="skill reveal" data-d="3"><h3><span class="dot"></span>Soft skills</h3><div class="chips"><span class="chip">Autonomie</span><span class="chip">Anglais (Erasmus+)</span><span class="chip">Gestion de projet</span></div></div>
+    <div class="skill reveal" data-d="3"><h3><span class="dot"></span>Soft skills</h3><div class="chips"><span class="chip">Autonomie</span><span class="chip">Anglais</span><span class="chip">Gestion de projet</span></div></div>
   </div>
 </section>
 
@@ -316,8 +337,7 @@ footer{border-top:1px solid var(--stroke);padding:38px 24px;text-align:center;co
       <div class="info-row"><span class="k">2026 → 2029</span><span class="val">Cycle Ingénieur Info &amp; Réseaux — ESAIP (alternance)</span></div>
       <div class="info-row"><span class="k">BTS SIO</span><span class="val">option SLAM</span></div>
       <div class="info-row"><span class="k">Bac Pro</span><span class="val">Systèmes Numériques — RISC</span></div>
-      <div class="info-row"><span class="k">International</span><span class="val">Stage Erasmus+ (Allemagne)</span></div>
-      <div class="info-row"><span class="k">Certif.</span><span class="val">BAFA</span></div>
+      <div class="info-row"><span class="k">Cap</span><span class="val">Cybersécurité · développement</span></div>
     </div>
     <!-- 📷 AJOUTER UNE IMAGE ICI : remplace tout le bloc <div class="media-slot">...</div> par
          <img src="images/ton-image.jpg" alt="Photo / certificat" class="zoom">
@@ -401,6 +421,8 @@ window.addEventListener('DOMContentLoaded',function(){
 
   try{initPixelWaves();}catch(e){}
   try{initPixelName();}catch(e){}
+  try{initCursorTrail();}catch(e){}
+  try{initKonami();}catch(e){}
   try{init3D();}catch(e){}
   window.__mwReady=true;   /* signale que app.js a bien démarré (filet de sécurité) */
 });
@@ -437,7 +459,7 @@ function initPixelName(){
     for(var i=0;i<particles.length;i++){var p=particles[i];
       var dx=p.x-mouse.x,dy=p.y-mouse.y,d2=dx*dx+dy*dy;
       if(d2<8000){var dd=Math.sqrt(d2)||1,f=(90-dd)/90*4.2;p.x+=dx/dd*f;p.y+=dy/dd*f;}
-      p.x+=(p.hx-p.x)*0.12;p.y+=(p.hy-p.y)*0.12;ctx.fillStyle=p.c;ctx.fillRect(p.x,p.y,sz,sz);}
+      p.x+=(p.hx-p.x)*0.08;p.y+=(p.hy-p.y)*0.08;ctx.fillStyle=p.c;ctx.fillRect(p.x,p.y,sz,sz);}
     requestAnimationFrame(frame);}
   function staticDraw(){ctx.clearRect(0,0,cv.width,cv.height);for(var i=0;i<particles.length;i++){var p=particles[i];ctx.fillStyle=p.c;ctx.fillRect(p.hx,p.hy,sz,sz);}}
   cv.addEventListener('mousemove',function(e){var r=cv.getBoundingClientRect();mouse.x=e.clientX-r.left;mouse.y=e.clientY-r.top;});
@@ -469,6 +491,40 @@ function init3D(){if(REDUCE)return;
     core.rotation.y-=.006;core.rotation.x+=.004;scene.rotation.y+=(mx*.5-scene.rotation.y)*.05;scene.rotation.x+=(my*.5-scene.rotation.x)*.05;
     renderer.render(scene,cam);requestAnimationFrame(loop);})();
   size();window.addEventListener('resize',size);}
+
+/* ---- traînée de pixels qui suit la souris (clin d'œil au ruban rétro) ---- */
+function initCursorTrail(){
+  var cv=document.getElementById('cursor-trail');if(!cv)return;
+  var ctx=cv.getContext('2d'),pts=[],cell=10;
+  function size(){cv.width=innerWidth;cv.height=innerHeight;}
+  size();window.addEventListener('resize',size);
+  window.addEventListener('mousemove',function(e){pts.push({x:e.clientX,y:e.clientY,life:1});if(pts.length>45)pts.shift();});
+  (function loop(){
+    ctx.clearRect(0,0,cv.width,cv.height);
+    for(var i=0;i<pts.length;i++){var p=pts[i],t=i/pts.length;
+      ctx.globalAlpha=Math.max(0,p.life)*0.45*t;ctx.fillStyle=mwGrad(t);
+      var s=cell*(0.4+t*0.8);
+      ctx.fillRect(Math.round(p.x/cell)*cell,Math.round(p.y/cell)*cell,s,s);
+      p.life-=0.014;}
+    ctx.globalAlpha=1;pts=pts.filter(function(p){return p.life>0;});
+    requestAnimationFrame(loop);})();}
+
+/* ---- easter egg : code Konami (haut haut bas bas gauche droite gauche droite B A) ---- */
+function initKonami(){
+  var seq=[38,38,40,40,37,39,37,39,66,65],pos=0;
+  window.addEventListener('keydown',function(e){
+    pos=(e.keyCode===seq[pos])?pos+1:(e.keyCode===seq[0]?1:0);
+    if(pos===seq.length){pos=0;konamiBurst();}});}
+function konamiBurst(){
+  var toast=document.createElement('div');toast.className='mw-toast';
+  toast.textContent='\u2726 Mode pixel d\u00e9bloqu\u00e9 \u2014 bien jou\u00e9 !';document.body.appendChild(toast);
+  setTimeout(function(){toast.parentNode&&toast.parentNode.removeChild(toast);},3500);
+  var c=document.createElement('canvas');c.className='konami-canvas';document.body.appendChild(c);
+  var ctx=c.getContext('2d');c.width=innerWidth;c.height=innerHeight;
+  var P=[];for(var i=0;i<140;i++)P.push({x:Math.random()*c.width,y:-20-Math.random()*c.height,v:2+Math.random()*5,s:6+Math.random()*10,t:Math.random()});
+  var n=0;(function r(){ctx.clearRect(0,0,c.width,c.height);
+    for(var i=0;i<P.length;i++){var p=P[i];ctx.fillStyle=mwGrad(p.t);ctx.fillRect(p.x,p.y,p.s,p.s);p.y+=p.v;}
+    n++;if(n<280)requestAnimationFrame(r);else c.parentNode&&c.parentNode.removeChild(c);})();}
 
 </script>
 <script>/* filet de sécurité : si le script principal n'a pas pu démarrer, on réaffiche tout */
