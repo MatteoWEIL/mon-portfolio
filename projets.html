@@ -156,14 +156,17 @@ canvas.pixel-wave{display:block;width:100%;height:120px;pointer-events:none}
 .info-row .k{font-family:var(--mono);color:var(--muted);font-size:13px}
 .info-row .val{text-align:right;font-weight:500}
 
-.hero-3d{position:relative;height:420px;width:100%;display:grid;place-items:center}
+.hero-3d{position:relative;height:440px;width:100%;display:grid;place-items:center;overflow:visible;z-index:2}
 .hero-3d canvas{position:absolute;top:0;left:0;width:100%;height:100%;display:block}
-.portrait{position:relative;z-index:2;width:228px;height:228px;border-radius:50%;padding:4px;background:var(--grad);
-  box-shadow:0 18px 50px rgba(0,0,0,.45)}
-.portrait>img{position:relative;z-index:1;width:100%;height:100%;border-radius:50%;object-fit:cover;display:block}
-.portrait .portrait-ph{position:absolute;top:4px;left:4px;right:4px;bottom:4px;border-radius:50%;display:grid;place-items:center;
-  background:var(--bg-2);color:var(--muted);font-family:var(--mono);font-size:13px;text-align:center;line-height:1.6}
+.portrait{position:relative;z-index:2;width:300px;height:300px;border-radius:50%;padding:5px;background:var(--grad);
+  box-shadow:0 20px 55px rgba(0,0,0,.5)}
+.portrait .disc{position:absolute;inset:5px;border-radius:50%;background:var(--bg-2);overflow:hidden;display:grid;place-items:center;z-index:1}
+.portrait .portrait-ph{color:var(--muted);font-family:var(--mono);font-size:13px;text-align:center;line-height:1.6}
 .portrait .portrait-ph small{font-size:11px;opacity:.7}
+/* photo détourée : elle "sort" du cercle, la main dépasse à droite par-dessus le texte.
+   Ajuste width / left / bottom selon ta photo si la main n'est pas bien placée. */
+.portrait>img{position:absolute;z-index:3;width:124%;height:auto;left:-4%;bottom:0;pointer-events:none}
+.about-grid .about{position:relative;z-index:1}
 .hero-3d .badge{position:absolute;bottom:16px;left:0;font-family:var(--mono);font-size:12px;color:var(--muted);
   background:var(--surface);border:1px solid var(--stroke);padding:8px 14px;border-radius:999px;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
 .hero-3d .badge b{color:var(--mauve)}
@@ -294,6 +297,7 @@ footer{border-top:1px solid var(--stroke);padding:38px 24px;text-align:center;co
   .socials{gap:8px}.social{padding:13px 16px}
   .to-top{bottom:16px;right:16px;width:42px;height:42px}
   .scroll-down{display:none} /* peu utile au pouce */
+  .portrait{width:236px;height:236px}
 }
 /* ---- appareils tactiles : on coupe les effets liés à la souris ---- */
 @media(hover:none){
@@ -605,6 +609,10 @@ function initPixelWaves(){
       } else if(v==='4'){ /* ondulation en grille (ripple) */
         for(x=0;x<w;x+=cell)for(y=0;y<h;y+=cell){var d=Math.sin(x*0.02+y*0.025+t*2.2);
           ctx.globalAlpha=0.12+0.55*(d*0.5+0.5);ctx.fillStyle=mwGrad(x/w);ctx.fillRect(x,y,cell-2,cell-2);}
+      } else if(v==='5'){ /* balayage vertical lumineux qui traverse */
+        var sweep=((t*55)%(w+160))-80;
+        for(x=0;x<w;x+=cell)for(y=0;y<h;y+=cell){var a=Math.max(0,1-Math.abs(x-sweep)/100);
+          ctx.globalAlpha=0.1+0.72*a;ctx.fillStyle=mwGrad(x/w);ctx.fillRect(x,y,cell-2,cell-2);}
       } else { /* 1 : vague (par défaut) */
         for(x=0;x<w;x+=cell){var base=h*0.42+Math.sin(x*0.013+t)*h*0.26+Math.sin(x*0.005-t*0.6)*h*0.12;
           for(y=base;y<h;y+=cell){ctx.globalAlpha=(y<base+cell*1.4)?1:0.9;ctx.fillStyle=mwGrad(x/w);ctx.fillRect(x,y,cell-2,cell-2);}}
@@ -615,7 +623,7 @@ function initPixelWaves(){
 /* nom en pixels réactif à la souris */
 function initPixelName(){
   var cv=document.getElementById('pixelName');if(!cv)return;
-  var ctx=cv.getContext('2d',{willReadFrequently:true}),particles=[],mouse={x:-9999,y:-9999},sz=3;
+  var ctx=cv.getContext('2d',{willReadFrequently:true}),particles=[],mouse={x:-9999,y:-9999},sz=3,tt=0;
   function build(){var W=cv.parentElement.clientWidth,H=cv.parentElement.clientHeight;
     cv.width=W;cv.height=H;ctx.clearRect(0,0,W,H);
     var fs=Math.min(W/4.2,160),lh=fs*0.9;
@@ -625,12 +633,14 @@ function initPixelName(){
     var d=ctx.getImageData(0,0,W,H).data;ctx.clearRect(0,0,W,H);
     particles=[];sz=Math.max(2,Math.round(fs/40));var gap=Math.max(4,Math.round(fs/20));
     for(var y=0;y<H;y+=gap)for(var x=0;x<W;x+=gap){
-      if(d[(y*W+x)*4+3]>128)particles.push({hx:x,hy:y,x:Math.random()*W,y:Math.random()*H,c:mwGrad(x/W)});}}
-  function frame(){var W=cv.width,H=cv.height;ctx.clearRect(0,0,W,H);
+      if(d[(y*W+x)*4+3]>128)particles.push({hx:x,hy:y,x:Math.random()*W,y:Math.random()*H,c:mwGrad(x/W),ph:Math.random()*6.283});}}
+  function frame(){var W=cv.width,H=cv.height;ctx.clearRect(0,0,W,H);tt+=0.07;
     for(var i=0;i<particles.length;i++){var p=particles[i];
       var dx=p.x-mouse.x,dy=p.y-mouse.y,d2=dx*dx+dy*dy;
       if(d2<8000){var dd=Math.sqrt(d2)||1,f=(90-dd)/90*4.2;p.x+=dx/dd*f;p.y+=dy/dd*f;}
-      p.x+=(p.hx-p.x)*0.08;p.y+=(p.hy-p.y)*0.08;ctx.fillStyle=p.c;ctx.fillRect(p.x,p.y,sz,sz);}
+      p.x+=(p.hx-p.x)*0.08;p.y+=(p.hy-p.y)*0.08;
+      var sx=Math.sin(tt+p.ph)*1.1,sy=Math.cos(tt*1.15+p.ph)*1.1; /* léger tremblement sur place */
+      ctx.fillStyle=p.c;ctx.fillRect(p.x+sx,p.y+sy,sz,sz);}
     requestAnimationFrame(frame);}
   function staticDraw(){ctx.clearRect(0,0,cv.width,cv.height);for(var i=0;i<particles.length;i++){var p=particles[i];ctx.fillStyle=p.c;ctx.fillRect(p.hx,p.hy,sz,sz);}}
   cv.addEventListener('mousemove',function(e){var r=cv.getBoundingClientRect();mouse.x=e.clientX-r.left;mouse.y=e.clientY-r.top;});
