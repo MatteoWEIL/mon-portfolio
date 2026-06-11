@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Association M.I.E.L — Mattéo Weil</title>
-<meta name="description" content="Réalisation web pour l’Association M.I.E.L (La Réunion).">
+<meta name="description" content="Création intégrale du site web de l’Association M.I.E.L, dédiée au développement de l’économie locale.">
 <!-- partage sur les réseaux -->
 <meta property="og:title" content="Association M.I.E.L — Mattéo Weil">
-<meta property="og:description" content="Réalisation web pour l’Association M.I.E.L (La Réunion).">
+<meta property="og:description" content="Création intégrale du site web de l’Association M.I.E.L, dédiée au développement de l’économie locale.">
 <meta property="og:image" content="https://matteoweil.com/wp-content/uploads/2025/02/new_logo-removebg-preview.png">
 <meta property="og:type" content="website">
 <link rel="icon" href="https://matteoweil.com/wp-content/uploads/2025/02/new_logo-removebg-preview.png">
@@ -115,7 +115,7 @@ h2.title{font-weight:700;font-size:clamp(38px,6.5vw,72px);line-height:1.0;letter
   -webkit-text-fill-color:transparent;color:transparent;animation:gradShift 6s linear infinite}
 @keyframes gradShift{to{background-position:200% center}}
 
-.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;
+.hero{position:relative;min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;
   max-width:980px;margin:0 auto;padding:120px 24px 70px}
 .hero-eyebrow{font-family:var(--mono);color:var(--muted);font-size:14px;margin-bottom:6px}
 .hero-eyebrow b{color:var(--mauve)}
@@ -197,6 +197,14 @@ canvas.pixel-wave{display:block;width:100%;height:120px;pointer-events:none}
 /* quand tu mets une vraie image dans .media-slot, elle remplit le cadre */
 .media-slot img,.media-slot video,.media-slot iframe{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;border:0}
 img.zoom{cursor:zoom-in}
+/* état "Prochainement" : propre et intentionnel (au lieu d'un cadre vide) */
+.media-slot.soon{background:var(--surface);color:var(--muted)}
+.media-slot.soon .icon{font-size:26px;opacity:.85}
+.media-slot.soon small{text-transform:uppercase;letter-spacing:1px}
+/* indicateur "descends" sous le hero */
+.scroll-down{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);font-size:20px;color:var(--mauve);
+  opacity:.7;animation:bob 1.6s ease-in-out infinite;text-decoration:none}
+@keyframes bob{50%{transform:translateX(-50%) translateY(8px)}}
 
 .gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:28px}
 
@@ -312,9 +320,9 @@ footer{border-top:1px solid var(--stroke);padding:38px 24px;text-align:center;co
 </header>
 <main>
 <div class="page-head">
-  <span class="eyebrow enter" data-d="1">Projet web</span>
+  <span class="eyebrow enter" data-d="1">Projet web · site complet</span>
   <h1 class="enter" data-d="2">Association M.I.E.L</h1>
-  <p class="enter" data-d="3">Réalisation web pour l’Association M.I.E.L (La Réunion).</p>
+  <p class="enter" data-d="3">Création intégrale du site web de l’Association M.I.E.L, dédiée au développement de l’économie locale.</p>
 </div>
 
 <canvas class="pixel-wave"></canvas>
@@ -325,8 +333,8 @@ footer{border-top:1px solid var(--stroke);padding:38px 24px;text-align:center;co
       <div class="media-slot round"><img src="images/associationMIEL.jpg" alt="Association M.I.E.L — visuel principal" class="zoom"></div>
     <div class="about reveal" data-d="1">
       <h2 style="font-weight:700;font-size:28px;margin-bottom:14px">Le projet</h2>
-      <p>Projet web réalisé pour l’Association M.I.E.L. (Cette description sera affinée avec les vraies infos : type de mission, technologies utilisées et résultat.)</p>
-      <div style="margin:18px 0"><div class="chips"><span class="chip hot">Web</span><span class="chip">Web</span><span class="chip">Communication</span></div></div>
+      <p>J’ai conçu et développé l’intégralité du site web de l’Association M.I.E.L, dont la mission est de soutenir et de dynamiser l’économie locale. Le site présente l’association, ses missions et les différentes activités qu’elle propose pour accompagner les initiatives et les acteurs économiques du territoire, dans une interface claire et accessible à tous.</p>
+      <div style="margin:18px 0"><div class="chips"><span class="chip hot">Site complet</span><span class="chip">Site web</span><span class="chip">UI/UX</span><span class="chip">Communication</span></div></div>
       <!-- 🔗 LIEN À MODIFIER : mets l’URL de la démo / du dépôt, ou supprime ce bouton -->
       <a href="#" class="btn primary">Voir la démo →</a>
       <a href="projets.html" class="btn ghost" style="margin-left:10px">← Tous les projets</a>
@@ -338,15 +346,15 @@ footer{border-top:1px solid var(--stroke);padding:38px 24px;text-align:center;co
     <!-- 📷 AJOUTER UNE IMAGE ICI : remplace tout le bloc <div class="media-slot">...</div> par
          <img src="images/ton-image.jpg" alt="Photo 1 — Association M.I.E.L" class="zoom">
          (pour une vidéo : <video src="images/demo.mp4" controls></video>) -->
-      <div class="media-slot round"><div><div class="icon">◈</div>Emplacement Photo 1 — Association M.I.E.L<small>capture du projet</small></div></div>
+      <div class="media-slot round soon"><div><div class="icon">⏳</div>Prochainement<small>contenu à venir</small></div></div>
     <!-- 📷 AJOUTER UNE IMAGE ICI : remplace tout le bloc <div class="media-slot">...</div> par
          <img src="images/ton-image.jpg" alt="Photo 2 — Association M.I.E.L" class="zoom">
          (pour une vidéo : <video src="images/demo.mp4" controls></video>) -->
-      <div class="media-slot round"><div><div class="icon">◈</div>Emplacement Photo 2 — Association M.I.E.L<small>capture du projet</small></div></div>
+      <div class="media-slot round soon"><div><div class="icon">⏳</div>Prochainement<small>contenu à venir</small></div></div>
     <!-- 📷 AJOUTER UNE IMAGE ICI : remplace tout le bloc <div class="media-slot">...</div> par
          <img src="images/ton-image.jpg" alt="Photo 3 — Association M.I.E.L" class="zoom">
          (pour une vidéo : <video src="images/demo.mp4" controls></video>) -->
-      <div class="media-slot round"><div><div class="icon">◈</div>Emplacement Photo 3 — Association M.I.E.L<small>capture du projet</small></div></div>
+      <div class="media-slot round soon"><div><div class="icon">⏳</div>Prochainement<small>contenu à venir</small></div></div>
   </div>
 </section>
 </main>
@@ -427,6 +435,7 @@ window.addEventListener('DOMContentLoaded',function(){
   try{initPixelName();}catch(e){}
   try{initCursorTrail();}catch(e){}
   try{initKonami();}catch(e){}
+  try{initTilt();}catch(e){}
   try{init3D();}catch(e){}
   window.__mwReady=true;   /* signale que app.js a bien démarré (filet de sécurité) */
 });
@@ -532,6 +541,22 @@ function konamiBurst(){
   var n=0;(function r(){ctx.clearRect(0,0,c.width,c.height);
     for(var i=0;i<P.length;i++){var p=P[i];ctx.fillStyle=mwGrad(p.t);ctx.fillRect(p.x,p.y,p.s,p.s);p.y+=p.v;}
     n++;if(n<280)requestAnimationFrame(r);else c.parentNode&&c.parentNode.removeChild(c);})();}
+
+/* ---- inclinaison 3D des cartes au survol (effet "carte qui suit la souris") ---- */
+function initTilt(){
+  document.querySelectorAll('.proj,.skill').forEach(function(card){
+    card.addEventListener('mousemove',function(e){
+      var r=card.getBoundingClientRect();
+      var rx=(((e.clientY-r.top)/r.height)-.5)*-5;
+      var ry=(((e.clientX-r.left)/r.width)-.5)*5;
+      card.style.transform='translateY(-6px) perspective(800px) rotateX('+rx.toFixed(2)+'deg) rotateY('+ry.toFixed(2)+'deg)';});
+    card.addEventListener('mouseleave',function(){card.style.transform='';});});}
+
+/* ---- petit clin d'œil aux développeurs qui ouvrent la console ---- */
+try{
+  console.log('%c \u2726 Salut d\u00e9veloppeur ! ','font-size:14px;font-weight:bold;color:#fff;background:linear-gradient(90deg,#8B5CF6,#C026D3,#FF3B6B);padding:6px 12px;border-radius:6px;');
+  console.log('%cCe portfolio est cod\u00e9 main par Matt\u00e9o Weil. Indice : tente le code Konami \u2191\u2191\u2193\u2193\u2190\u2192\u2190\u2192 B A \ud83d\ude09','color:#C026D3;font-size:12px;');
+}catch(e){}
 
 </script>
 <script>/* filet de sécurité : si le script principal n'a pas pu démarrer, on réaffiche tout */

@@ -115,7 +115,7 @@ h2.title{font-weight:700;font-size:clamp(38px,6.5vw,72px);line-height:1.0;letter
   -webkit-text-fill-color:transparent;color:transparent;animation:gradShift 6s linear infinite}
 @keyframes gradShift{to{background-position:200% center}}
 
-.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;
+.hero{position:relative;min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;
   max-width:980px;margin:0 auto;padding:120px 24px 70px}
 .hero-eyebrow{font-family:var(--mono);color:var(--muted);font-size:14px;margin-bottom:6px}
 .hero-eyebrow b{color:var(--mauve)}
@@ -197,6 +197,14 @@ canvas.pixel-wave{display:block;width:100%;height:120px;pointer-events:none}
 /* quand tu mets une vraie image dans .media-slot, elle remplit le cadre */
 .media-slot img,.media-slot video,.media-slot iframe{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;border:0}
 img.zoom{cursor:zoom-in}
+/* état "Prochainement" : propre et intentionnel (au lieu d'un cadre vide) */
+.media-slot.soon{background:var(--surface);color:var(--muted)}
+.media-slot.soon .icon{font-size:26px;opacity:.85}
+.media-slot.soon small{text-transform:uppercase;letter-spacing:1px}
+/* indicateur "descends" sous le hero */
+.scroll-down{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);font-size:20px;color:var(--mauve);
+  opacity:.7;animation:bob 1.6s ease-in-out infinite;text-decoration:none}
+@keyframes bob{50%{transform:translateX(-50%) translateY(8px)}}
 
 .gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:28px}
 
@@ -324,7 +332,7 @@ footer{border-top:1px solid var(--stroke);padding:38px 24px;text-align:center;co
     <!-- 📷 AJOUTER UNE IMAGE ICI : remplace tout le bloc <div class="media-slot">...</div> par
          <img src="images/ton-image.jpg" alt="Deezlock — visuel principal" class="zoom">
          (pour une vidéo : <video src="images/demo.mp4" controls></video>) -->
-      <div class="media-slot round"><div><div class="icon">◈</div>Emplacement Deezlock — visuel principal<small>image principale (16:9)</small></div></div>
+      <div class="media-slot round soon"><div><div class="icon">⏳</div>Prochainement<small>contenu à venir</small></div></div>
     <div class="about reveal" data-d="1">
       <h2 style="font-weight:700;font-size:28px;margin-bottom:14px">Le projet</h2>
       <p>Le projet consiste en la création d’une application musicale développée en Java avec la bibliothèque Jaco MP3. L’application permet de lire des fichiers audio et d’offrir une interface utilisateur intuitive. Le développement a suivi plusieurs étapes, de la planification à la conception visuelle et technique.</p>
@@ -340,15 +348,15 @@ footer{border-top:1px solid var(--stroke);padding:38px 24px;text-align:center;co
     <!-- 📷 AJOUTER UNE IMAGE ICI : remplace tout le bloc <div class="media-slot">...</div> par
          <img src="images/ton-image.jpg" alt="Photo 1 — Deezlock" class="zoom">
          (pour une vidéo : <video src="images/demo.mp4" controls></video>) -->
-      <div class="media-slot round"><div><div class="icon">◈</div>Emplacement Photo 1 — Deezlock<small>capture du projet</small></div></div>
+      <div class="media-slot round soon"><div><div class="icon">⏳</div>Prochainement<small>contenu à venir</small></div></div>
     <!-- 📷 AJOUTER UNE IMAGE ICI : remplace tout le bloc <div class="media-slot">...</div> par
          <img src="images/ton-image.jpg" alt="Photo 2 — Deezlock" class="zoom">
          (pour une vidéo : <video src="images/demo.mp4" controls></video>) -->
-      <div class="media-slot round"><div><div class="icon">◈</div>Emplacement Photo 2 — Deezlock<small>capture du projet</small></div></div>
+      <div class="media-slot round soon"><div><div class="icon">⏳</div>Prochainement<small>contenu à venir</small></div></div>
     <!-- 📷 AJOUTER UNE IMAGE ICI : remplace tout le bloc <div class="media-slot">...</div> par
          <img src="images/ton-image.jpg" alt="Photo 3 — Deezlock" class="zoom">
          (pour une vidéo : <video src="images/demo.mp4" controls></video>) -->
-      <div class="media-slot round"><div><div class="icon">◈</div>Emplacement Photo 3 — Deezlock<small>capture du projet</small></div></div>
+      <div class="media-slot round soon"><div><div class="icon">⏳</div>Prochainement<small>contenu à venir</small></div></div>
   </div>
 </section>
 </main>
@@ -429,6 +437,7 @@ window.addEventListener('DOMContentLoaded',function(){
   try{initPixelName();}catch(e){}
   try{initCursorTrail();}catch(e){}
   try{initKonami();}catch(e){}
+  try{initTilt();}catch(e){}
   try{init3D();}catch(e){}
   window.__mwReady=true;   /* signale que app.js a bien démarré (filet de sécurité) */
 });
@@ -534,6 +543,22 @@ function konamiBurst(){
   var n=0;(function r(){ctx.clearRect(0,0,c.width,c.height);
     for(var i=0;i<P.length;i++){var p=P[i];ctx.fillStyle=mwGrad(p.t);ctx.fillRect(p.x,p.y,p.s,p.s);p.y+=p.v;}
     n++;if(n<280)requestAnimationFrame(r);else c.parentNode&&c.parentNode.removeChild(c);})();}
+
+/* ---- inclinaison 3D des cartes au survol (effet "carte qui suit la souris") ---- */
+function initTilt(){
+  document.querySelectorAll('.proj,.skill').forEach(function(card){
+    card.addEventListener('mousemove',function(e){
+      var r=card.getBoundingClientRect();
+      var rx=(((e.clientY-r.top)/r.height)-.5)*-5;
+      var ry=(((e.clientX-r.left)/r.width)-.5)*5;
+      card.style.transform='translateY(-6px) perspective(800px) rotateX('+rx.toFixed(2)+'deg) rotateY('+ry.toFixed(2)+'deg)';});
+    card.addEventListener('mouseleave',function(){card.style.transform='';});});}
+
+/* ---- petit clin d'œil aux développeurs qui ouvrent la console ---- */
+try{
+  console.log('%c \u2726 Salut d\u00e9veloppeur ! ','font-size:14px;font-weight:bold;color:#fff;background:linear-gradient(90deg,#8B5CF6,#C026D3,#FF3B6B);padding:6px 12px;border-radius:6px;');
+  console.log('%cCe portfolio est cod\u00e9 main par Matt\u00e9o Weil. Indice : tente le code Konami \u2191\u2191\u2193\u2193\u2190\u2192\u2190\u2192 B A \ud83d\ude09','color:#C026D3;font-size:12px;');
+}catch(e){}
 
 </script>
 <script>/* filet de sécurité : si le script principal n'a pas pu démarrer, on réaffiche tout */
