@@ -156,8 +156,25 @@ canvas.pixel-wave{display:block;width:100%;height:120px;pointer-events:none}
 .info-row .k{font-family:var(--mono);color:var(--muted);font-size:13px}
 .info-row .val{text-align:right;font-weight:500}
 
-.hero-3d{position:relative;height:440px;width:100%;display:grid;place-items:center;overflow:visible;z-index:2}
-.hero-3d canvas{position:absolute;top:0;left:0;width:100%;height:100%;display:block}
+.hero-3d{
+  position:relative;
+  height:440px;
+  width:100%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  overflow:visible;
+  z-index:2;
+}
+.hero-3d canvas{
+  position:absolute;
+  top:-10%;    /* On agrandit la zone de rendu vers le haut */
+  left:-10%;   /* On agrandit la zone de rendu vers la gauche */
+  width:120%;  /* On lui donne 20% d'espace en plus pour que l'animation respire */
+  height:120%; /* Idem pour la hauteur */
+  display:block;
+  pointer-events:none; /* Évite que le canvas bloque les clics sur ta photo */
+}
 
 .portrait{
   position:relative;
